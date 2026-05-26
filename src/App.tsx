@@ -12,6 +12,7 @@ import Profile from "./pages/Profile";
 import SignIn from "./pages/SignIn";
 import SignUp from "./pages/SignUp";
 import ForgotPassword from "./pages/ForgotPassword";
+import WeddingInvitationPage from "./pages/WeddingInvitationPage";
 
 function App() {
   return (
@@ -22,7 +23,8 @@ function App() {
 
         {/* Public: shareable invitation link — no auth required */}
         <Route path="/invite/:slug" element={<PublicInvite />} />
-
+        <Route path="/wedding-invitation" element={<WeddingInvitationPage />} />
+    
         {/* Guest-only routes */}
         <Route path="/login" element={<GuestRoute><SignIn /></GuestRoute>} />
         <Route path="/signup" element={<GuestRoute><SignUp /></GuestRoute>} />

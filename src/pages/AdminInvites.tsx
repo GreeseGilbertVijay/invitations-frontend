@@ -121,7 +121,7 @@ const AdminInvites = () => {
           <p className="text-gray-500 text-sm mt-0.5">Viewing all invitations from all users.</p>
         </div>
         <Link
-          to="/"
+          to="/dashboard"
           className="inline-flex items-center gap-2 border border-gray-200 text-gray-600 hover:bg-gray-50 px-4 py-2 rounded-xl text-sm font-medium transition-colors"
         >
           ← Dashboard

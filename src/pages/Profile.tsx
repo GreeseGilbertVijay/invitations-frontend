@@ -7,7 +7,7 @@ interface UserProfile {
   username: string;
   email: string;
   emailVerified: boolean;
-  role: string;
+  userrole: string;
 }
 
 const Row = ({ label, value }: { label: string; value: string }) => (
@@ -89,7 +89,7 @@ const Profile = () => {
       {/* Details card */}
       <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6">
         <h3 className="text-xs font-bold text-gray-400 capitalize tracking-wider mb-2">Account Details</h3>
-        <Row label="Role" value={user.role} />
+        <Row label="Role" value={user.userrole} />
         <Row label="Username" value={user.username} />
         <Row label="Email" value={user.email} />
         <Row label="Account Status" value={user.emailVerified ? "Active" : "Pending Verification"} />

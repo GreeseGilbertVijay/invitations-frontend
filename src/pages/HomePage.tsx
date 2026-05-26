@@ -1,4 +1,6 @@
 import { Link, useNavigate } from "react-router-dom";
+import TopNav from "../components/TopNav";
+import { getTokenPayload } from "../utils/auth";
 
 const categories = [
   {
@@ -42,6 +44,7 @@ const categories = [
 const HomePage = () => {
   const navigate = useNavigate();
   const isAuth = !!localStorage.getItem("token");
+   const isLoggedIn = getTokenPayload() !== null;
 
   const handleCategoryClick = (categoryId: string) => {
     if (isAuth) {
@@ -53,46 +56,7 @@ const HomePage = () => {
 
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col">
-
-      {/* Top Navbar */}
-      <header className="bg-white border-b border-gray-200 sticky top-0 z-10">
-        <div className="px-4 lg:px-8 py-3 flex items-center justify-between gap-4">
-          {/* Logo */}
-          <div className="flex items-center gap-2">
-            <span className="text-lg">💍</span>
-            <span className="font-bold text-gray-800">InviteBox</span>
-          </div>
-
-          {/* Nav links */}
-          <nav className="hidden sm:flex items-center gap-6">
-            <a href="/" className="text-sm font-semibold text-gray-800 hover:text-pink-600 transition-colors">
-              Home
-            </a>
-            <a href="#templates" className="text-sm font-medium text-gray-500 hover:text-pink-600 transition-colors">
-              Templates
-            </a>
-            <a href="#features" className="text-sm font-medium text-gray-500 hover:text-pink-600 transition-colors">
-              Features
-            </a>
-          </nav>
-
-          {/* Auth buttons */}
-          <div className="flex items-center gap-2 ml-auto">
-            <Link
-              to="/login"
-              className="text-sm font-medium text-gray-600 hover:text-pink-600 px-4 py-2 rounded-lg hover:bg-gray-50 transition-all"
-            >
-              Sign In
-            </Link>
-            <Link
-              to="/signup"
-              className="text-sm font-semibold bg-pink-600 hover:bg-pink-700 text-white px-5 py-2 rounded-lg transition-all shadow-sm shadow-pink-200"
-            >
-              Sign Up
-            </Link>
-          </div>
-        </div>
-      </header>
+      <TopNav />
 
       <main className="flex-1">
           {/* Hero */}
@@ -115,12 +79,16 @@ const HomePage = () => {
                 >
                   Get Started Free
                 </Link>
+                {isLoggedIn ? (
+                  <></>
+                  ) : (
                 <Link
                   to="/login"
                   className="px-8 py-3 border border-gray-200 text-gray-600 hover:border-pink-300 hover:text-pink-600 font-medium rounded-xl transition-all text-sm"
                 >
                   Sign In to Dashboard
                 </Link>
+                )}
               </div>
             </div>
           </section>
@@ -218,9 +186,11 @@ const HomePage = () => {
           <footer className="px-4 lg:px-12 py-6 bg-gray-900 text-gray-400 text-center text-xs">
             © {new Date().getFullYear()} InviteBox. All rights reserved.
             <span className="mx-2">·</span>
-            <Link to="/login" className="hover:text-white transition-colors">Sign In</Link>
-            <span className="mx-2">·</span>
-            <Link to="/signup" className="hover:text-white transition-colors">Sign Up</Link>
+            {isLoggedIn ? (
+              <></>
+            ) : (
+            <><Link to="/login" className="hover:text-white transition-colors">Sign In</Link><span className="mx-2">·</span><Link to="/signup" className="hover:text-white transition-colors">Sign Up</Link></>
+            )}
           </footer>
       </main>
     </div>
