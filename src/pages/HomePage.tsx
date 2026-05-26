@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
 const categories = [
@@ -40,46 +39,8 @@ const categories = [
   },
 ];
 
-const sidebarLinks = [
-  {
-    label: "Home",
-    href: "/",
-    icon: (
-      <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
-      </svg>
-    ),
-    active: true,
-  },
-  {
-    label: "Wedding Invitations",
-    href: "#wedding",
-    icon: <span className="text-sm">💍</span>,
-    active: false,
-  },
-  {
-    label: "Birthday Invitations",
-    href: "#birthday",
-    icon: <span className="text-sm">🎂</span>,
-    active: false,
-  },
-  {
-    label: "Anniversary",
-    href: "#anniversary",
-    icon: <span className="text-sm">🥂</span>,
-    active: false,
-  },
-  {
-    label: "Baby Shower",
-    href: "#babyshower",
-    icon: <span className="text-sm">🍼</span>,
-    active: false,
-  },
-];
-
 const HomePage = () => {
   const navigate = useNavigate();
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const isAuth = !!localStorage.getItem("token");
 
   const handleCategoryClick = (categoryId: string) => {
@@ -91,137 +52,49 @@ const HomePage = () => {
   };
 
   return (
-    <div className="flex min-h-screen bg-gray-50">
-      {/* Mobile overlay */}
-      {mobileMenuOpen && (
-        <div
-          className="fixed inset-0 bg-black/50 z-20 lg:hidden"
-          onClick={() => setMobileMenuOpen(false)}
-        />
-      )}
+    <div className="min-h-screen bg-gray-50 flex flex-col">
 
-      {/* Left Sidebar */}
-      <aside
-        className={`
-          fixed top-0 left-0 h-full w-64 bg-gray-900 text-white z-30 flex flex-col
-          transform transition-transform duration-300 ease-in-out
-          ${mobileMenuOpen ? "translate-x-0" : "-translate-x-full"}
-          lg:sticky lg:top-0 lg:h-screen lg:translate-x-0 lg:z-auto lg:flex-shrink-0
-        `}
-      >
-        {/* Brand / Logo */}
-        <div className="flex items-center justify-between px-6 py-5 border-b border-gray-700/60">
+      {/* Top Navbar */}
+      <header className="bg-white border-b border-gray-200 sticky top-0 z-10">
+        <div className="px-4 lg:px-8 py-3 flex items-center justify-between gap-4">
+          {/* Logo */}
           <div className="flex items-center gap-2">
-            <div className="w-8 h-8 bg-pink-500 rounded-lg flex items-center justify-center text-base">
-              💍
-            </div>
-            <span className="text-lg font-bold tracking-wide">InviteBox</span>
+            <span className="text-lg">💍</span>
+            <span className="font-bold text-gray-800">InviteBox</span>
           </div>
-          <button
-            onClick={() => setMobileMenuOpen(false)}
-            className="lg:hidden text-gray-400 hover:text-white"
-          >
-            <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-            </svg>
-          </button>
+
+          {/* Nav links */}
+          <nav className="hidden sm:flex items-center gap-6">
+            <a href="/" className="text-sm font-semibold text-gray-800 hover:text-pink-600 transition-colors">
+              Home
+            </a>
+            <a href="#templates" className="text-sm font-medium text-gray-500 hover:text-pink-600 transition-colors">
+              Templates
+            </a>
+            <a href="#features" className="text-sm font-medium text-gray-500 hover:text-pink-600 transition-colors">
+              Features
+            </a>
+          </nav>
+
+          {/* Auth buttons */}
+          <div className="flex items-center gap-2 ml-auto">
+            <Link
+              to="/login"
+              className="text-sm font-medium text-gray-600 hover:text-pink-600 px-4 py-2 rounded-lg hover:bg-gray-50 transition-all"
+            >
+              Sign In
+            </Link>
+            <Link
+              to="/signup"
+              className="text-sm font-semibold bg-pink-600 hover:bg-pink-700 text-white px-5 py-2 rounded-lg transition-all shadow-sm shadow-pink-200"
+            >
+              Sign Up
+            </Link>
+          </div>
         </div>
+      </header>
 
-        {/* Navigation */}
-        <nav className="flex-1 px-3 py-5 overflow-y-auto">
-          <p className="px-4 mb-3 text-[10px] font-semibold uppercase tracking-widest text-gray-500">
-            Invitations
-          </p>
-          <div className="space-y-1">
-            {sidebarLinks.map((link) => (
-              <a
-                key={link.label}
-                href={link.href}
-                onClick={() => setMobileMenuOpen(false)}
-                className={`flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium transition-all ${
-                  link.active
-                    ? "bg-pink-600 text-white shadow-md shadow-pink-900/40"
-                    : "text-gray-400 hover:bg-gray-800 hover:text-white"
-                }`}
-              >
-                {link.icon}
-                {link.label}
-              </a>
-            ))}
-          </div>
-        </nav>
-
-        {/* Auth buttons at bottom */}
-        <div className="px-4 py-5 border-t border-gray-700/60 space-y-2">
-          <Link
-            to="/login"
-            className="block w-full text-center px-4 py-2.5 rounded-xl text-sm font-medium text-gray-300 border border-gray-600 hover:bg-gray-800 hover:text-white transition-all"
-          >
-            Sign In
-          </Link>
-          <Link
-            to="/signup"
-            className="block w-full text-center px-4 py-2.5 rounded-xl text-sm font-medium bg-pink-600 hover:bg-pink-700 text-white transition-all shadow-md shadow-pink-900/30"
-          >
-            Sign Up Free
-          </Link>
-        </div>
-      </aside>
-
-      {/* Main area */}
-      <div className="lg:ml-0 flex-1 flex flex-col min-w-0">
-        {/* Top Navbar */}
-        <header className="bg-white border-b border-gray-200 sticky top-0 z-10">
-          <div className="px-4 lg:px-8 py-3 flex items-center justify-between gap-4">
-            {/* Mobile: hamburger + logo */}
-            <div className="flex items-center gap-3 lg:hidden">
-              <button
-                onClick={() => setMobileMenuOpen(true)}
-                className="p-2 rounded-lg text-gray-600 hover:bg-gray-100"
-              >
-                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-                </svg>
-              </button>
-              <div className="flex items-center gap-2">
-                <span className="text-lg">💍</span>
-                <span className="font-bold text-gray-800">InviteBox</span>
-              </div>
-            </div>
-
-            {/* Desktop: nav links */}
-            <nav className="hidden lg:flex items-center gap-6">
-              <a href="/" className="text-sm font-semibold text-gray-800 hover:text-pink-600 transition-colors">
-                Home
-              </a>
-              <a href="#templates" className="text-sm font-medium text-gray-500 hover:text-pink-600 transition-colors">
-                Templates
-              </a>
-              <a href="#features" className="text-sm font-medium text-gray-500 hover:text-pink-600 transition-colors">
-                Features
-              </a>
-            </nav>
-
-            {/* Auth buttons */}
-            <div className="flex items-center gap-2 ml-auto">
-              <Link
-                to="/login"
-                className="text-sm font-medium text-gray-600 hover:text-pink-600 px-4 py-2 rounded-lg hover:bg-gray-50 transition-all"
-              >
-                Sign In
-              </Link>
-              <Link
-                to="/signup"
-                className="text-sm font-semibold bg-pink-600 hover:bg-pink-700 text-white px-5 py-2 rounded-lg transition-all shadow-sm shadow-pink-200"
-              >
-                Sign Up
-              </Link>
-            </div>
-          </div>
-        </header>
-
-        {/* Page Content */}
-        <main className="flex-1">
+      <main className="flex-1">
           {/* Hero */}
           <section className="py-14 lg:py-20 px-4 lg:px-12 text-center bg-gradient-to-b from-white to-gray-50">
             <div className="max-w-2xl mx-auto">
@@ -349,8 +222,7 @@ const HomePage = () => {
             <span className="mx-2">·</span>
             <Link to="/signup" className="hover:text-white transition-colors">Sign Up</Link>
           </footer>
-        </main>
-      </div>
+      </main>
     </div>
   );
 };

@@ -7,6 +7,7 @@ interface UserProfile {
   username: string;
   email: string;
   emailVerified: boolean;
+  role: string;
 }
 
 const Row = ({ label, value }: { label: string; value: string }) => (
@@ -70,7 +71,7 @@ const Profile = () => {
           {initials}
         </div>
         <div className="text-center sm:text-left">
-          <h2 className="text-xl font-bold text-gray-800">{user.username}</h2>
+          <h2 className="text-xl capitalize font-bold text-gray-800">{user.username}</h2>
           <p className="text-gray-500 text-sm mt-0.5">{user.email}</p>
           <span
             className={`inline-flex items-center gap-1.5 mt-2 text-xs px-3 py-1 rounded-full font-semibold ${
@@ -87,7 +88,8 @@ const Profile = () => {
 
       {/* Details card */}
       <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6">
-        <h3 className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-2">Account Details</h3>
+        <h3 className="text-xs font-bold text-gray-400 capitalize tracking-wider mb-2">Account Details</h3>
+        <Row label="Role" value={user.role} />
         <Row label="Username" value={user.username} />
         <Row label="Email" value={user.email} />
         <Row label="Account Status" value={user.emailVerified ? "Active" : "Pending Verification"} />

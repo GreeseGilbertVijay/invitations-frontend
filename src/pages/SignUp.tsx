@@ -85,7 +85,7 @@ const SignUp = () => {
             <span className="font-bold text-gray-800 text-lg">Wedding Invitations</span>
           </div>
 
-          <h1 className="text-2xl lg:text-3xl font-bold text-gray-800 mb-1">Create account</h1>
+          <h1 className="text-2xl lg:text-3xl cursor-pointer font-bold text-gray-800 mb-1">Create account</h1>
           <p className="text-gray-500 text-sm mb-8">
             Already have an account?{" "}
             <Link to="/login" className="text-blue-600 hover:text-blue-700 font-medium">
@@ -167,7 +167,7 @@ const SignUp = () => {
             <button
               type="submit"
               disabled={loading}
-              className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 rounded-xl transition-colors text-sm disabled:opacity-60 shadow-sm shadow-blue-200"
+              className="w-full bg-blue-600 cursor-pointer hover:bg-blue-700 text-white font-semibold py-3 rounded-xl transition-colors text-sm disabled:opacity-60 shadow-sm shadow-blue-200"
             >
               {loading ? "Creating account..." : "Create Account"}
             </button>
