@@ -13,6 +13,8 @@ import SignIn from "./pages/SignIn";
 import SignUp from "./pages/SignUp";
 import ForgotPassword from "./pages/ForgotPassword";
 import WeddingInvitationPage from "./pages/WeddingInvitationPage";
+import TemplatesPage from "./pages/TemplatesPage";
+import TemplatePreviewPage from "./pages/TemplatePreviewPage";
 
 function App() {
   return (
@@ -29,6 +31,14 @@ function App() {
         <Route path="/login" element={<GuestRoute><SignIn /></GuestRoute>} />
         <Route path="/signup" element={<GuestRoute><SignUp /></GuestRoute>} />
         <Route path="/forgot-password" element={<GuestRoute><ForgotPassword /></GuestRoute>} />
+
+        {/* Public routes that still show the nav */}
+        <Route element={<Layout />}>
+          <Route path="/templates" element={<TemplatesPage />} />
+        </Route>
+
+        {/* Template preview — fully public, no nav needed */}
+        <Route path="/templates/preview/:templateId" element={<TemplatePreviewPage />} />
 
         {/* Protected routes */}
         <Route

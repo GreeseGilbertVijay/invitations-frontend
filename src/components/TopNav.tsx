@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
-import { MdHouse ,MdDashboard, MdEmail, MdAdd, MdPerson, MdViewList, MdLogout, MdClose, MdMenu} from "react-icons/md";
+import { MdHouse, MdDashboard, MdEmail, MdAdd, MdPerson, MdViewList, MdLogout, MdClose, MdMenu, MdApps } from "react-icons/md";
 import { isSuperAdmin, getTokenPayload } from "../utils/auth";
 
 const TopNav = () => {
@@ -22,14 +22,14 @@ const TopNav = () => {
       to: "/",
       label: "Home",
       icon: <MdHouse className="w-4 h-4" />,
-      show: isLoggedIn || true, // Always show Home
+      show: true,
       admin: false,
     },
-     {
-      to: "/wedding-invitation",
-      label: "Wedding Invitation",
-      icon: <MdHouse className="w-4 h-4" />,
-      show: isLoggedIn || true, // Always show Home
+    {
+      to: "/templates",
+      label: "Templates",
+      icon: <MdApps className="w-4 h-4" />,
+      show: true,
       admin: false,
     },
     {
@@ -115,11 +115,9 @@ const TopNav = () => {
         </div>
 
         {/* Desktop Menu */}
-        {isLoggedIn && (
-          <nav className="hidden md:flex items-center gap-1 ml-6">
-            {renderLinks()}
-          </nav>
-        )}
+        <nav className="hidden md:flex items-center gap-1 ml-6">
+          {renderLinks()}
+        </nav>
 
         {/* Desktop Right */}
         <div className="hidden md:flex items-center gap-3 ml-auto">
@@ -175,17 +173,17 @@ const TopNav = () => {
       {/* Mobile Menu */}
       {mobileOpen && (
         <div className="md:hidden border-t border-gray-700/60 px-3 py-3 space-y-2">
+          {/* Nav links — public links always shown, protected links shown when logged in */}
+          {renderLinks(() => setMobileOpen(false))}
+
           {isLoggedIn ? (
             <>
-              {renderLinks(() => setMobileOpen(false))}
-
               {isAdmin && (
                 <div className="px-3 py-2 rounded-lg bg-purple-500/10 text-purple-300 text-xs font-medium flex items-center gap-2">
                   <span className="w-1.5 h-1.5 rounded-full bg-purple-400" />
                   Superadmin
                 </div>
               )}
-
               <button
                 onClick={logout}
                 className="flex items-center gap-2 w-full px-3 py-2 rounded-lg text-sm font-medium text-gray-400 hover:bg-red-500/10 hover:text-red-400 transition-all"
@@ -195,7 +193,7 @@ const TopNav = () => {
               </button>
             </>
           ) : (
-            <div className="flex flex-col gap-2">
+            <div className="flex flex-col gap-2 pt-1 border-t border-gray-700/40">
               <NavLink
                 to="/login"
                 onClick={() => setMobileOpen(false)}
@@ -203,7 +201,6 @@ const TopNav = () => {
               >
                 Sign In
               </NavLink>
-
               <NavLink
                 to="/register"
                 onClick={() => setMobileOpen(false)}

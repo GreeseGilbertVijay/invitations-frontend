@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axiosClient from "../api/axiosClient";
+import TopNav from "../components/TopNav";
 
 const EyeIcon = ({ open }: { open: boolean }) =>
   open ? (
@@ -46,6 +47,8 @@ const SignUp = () => {
   };
 
   return (
+    <div>
+      <TopNav />
     <div className="min-h-screen flex">
       {/* Left panel */}
       <div className="hidden lg:flex lg:w-1/2 bg-gradient-to-br from-indigo-600 via-blue-700 to-blue-800 flex-col justify-between p-12">
@@ -174,6 +177,7 @@ const SignUp = () => {
           </form>
         </div>
       </div>
+    </div>
     </div>
   );
 };

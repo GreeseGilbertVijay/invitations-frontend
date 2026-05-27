@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axiosClient from "../api/axiosClient";
+import TopNav from "../components/TopNav";
 
 type Step = "email" | "otp" | "reset";
 
@@ -71,6 +72,8 @@ const ForgotPassword = () => {
     );
 
   return (
+    <div>
+      <TopNav />
     <div className="min-h-screen flex items-center justify-center bg-gray-50 p-4">
       <div className="w-full max-w-md">
         {/* Brand */}
@@ -218,6 +221,7 @@ const ForgotPassword = () => {
           </p>
         </div>
       </div>
+    </div>
     </div>
   );
 };
