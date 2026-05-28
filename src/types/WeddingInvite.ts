@@ -16,6 +16,11 @@ export interface WeddingInvite {
   message?: string;
   template: TemplateId;
   slug: string;
+  groomImage?: string;
+  brideImage?: string;
+  gallery?: string[];
+  video?: string;
+  audio?: string;
   createdBy?: string;
   createdAt?: string;
 }

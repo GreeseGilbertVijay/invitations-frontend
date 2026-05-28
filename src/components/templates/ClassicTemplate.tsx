@@ -8,6 +8,12 @@ const formatDate = (d: string) => {
   return date.toLocaleDateString("en-IN", { weekday: "long", year: "numeric", month: "long", day: "numeric" });
 };
 
+const driveImg = (id: string) =>
+  `https://drive.google.com/thumbnail?id=${id}&sz=w600`;
+
+const driveEmbed = (id: string) =>
+  `https://drive.google.com/file/d/${id}/preview`;
+
 export default function ClassicTemplate({ invite }: Props) {
   return (
     <div style={{
@@ -156,6 +162,100 @@ export default function ClassicTemplate({ invite }: Props) {
               </p>
               {invite.contactName && <p style={{ fontSize: 14, color: "#5a3e1b" }}>{invite.contactName}</p>}
               {invite.contactPhone && <p style={{ fontSize: 14, color: "#b8860b", fontWeight: "bold" }}>{invite.contactPhone}</p>}
+            </div>
+          )}
+
+          {/* Groom & Bride photos */}
+          {(invite.groomImage || invite.brideImage) && (
+            <div style={{ display: "flex", justifyContent: "center", gap: 32, marginTop: 24, marginBottom: 8 }}>
+              {invite.groomImage && (
+                <div style={{ textAlign: "center" }}>
+                  <img
+                    src={driveImg(invite.groomImage)}
+                    alt="Groom"
+                    style={{
+                      width: 110, height: 110, objectFit: "cover",
+                      borderRadius: "50%",
+                      border: "3px solid #c9a84c",
+                      boxShadow: "0 4px 16px rgba(180,140,60,0.25)",
+                    }}
+                  />
+                  <p style={{ fontSize: 12, color: "#8B6914", marginTop: 6, letterSpacing: 2 }}>
+                    {invite.groomName}
+                  </p>
+                </div>
+              )}
+              {invite.brideImage && (
+                <div style={{ textAlign: "center" }}>
+                  <img
+                    src={driveImg(invite.brideImage)}
+                    alt="Bride"
+                    style={{
+                      width: 110, height: 110, objectFit: "cover",
+                      borderRadius: "50%",
+                      border: "3px solid #c9a84c",
+                      boxShadow: "0 4px 16px rgba(180,140,60,0.25)",
+                    }}
+                  />
+                  <p style={{ fontSize: 12, color: "#8B6914", marginTop: 6, letterSpacing: 2 }}>
+                    {invite.brideName}
+                  </p>
+                </div>
+              )}
+            </div>
+          )}
+
+          {/* Gallery */}
+          {invite.gallery && invite.gallery.length > 0 && (
+            <div style={{ marginTop: 24 }}>
+              <p style={{ textAlign: "center", fontSize: 11, letterSpacing: 4, textTransform: "uppercase", color: "#8B6914", marginBottom: 12 }}>
+                Gallery
+              </p>
+              <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 6 }}>
+                {invite.gallery.map((id) => (
+                  <img
+                    key={id}
+                    src={driveImg(id)}
+                    alt="gallery"
+                    style={{
+                      width: "100%", aspectRatio: "1", objectFit: "cover",
+                      borderRadius: 4, border: "1px solid #dab96a",
+                    }}
+                  />
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Video */}
+          {invite.video && (
+            <div style={{ marginTop: 24 }}>
+              <p style={{ textAlign: "center", fontSize: 11, letterSpacing: 4, textTransform: "uppercase", color: "#8B6914", marginBottom: 10 }}>
+                Video
+              </p>
+              <div style={{ position: "relative", paddingBottom: "56.25%", height: 0, borderRadius: 4, overflow: "hidden", border: "1px solid #dab96a" }}>
+                <iframe
+                  src={driveEmbed(invite.video)}
+                  style={{ position: "absolute", top: 0, left: 0, width: "100%", height: "100%", border: "none" }}
+                  allow="autoplay"
+                  title="Wedding video"
+                />
+              </div>
+            </div>
+          )}
+
+          {/* Audio */}
+          {invite.audio && (
+            <div style={{ marginTop: 24 }}>
+              <p style={{ textAlign: "center", fontSize: 11, letterSpacing: 4, textTransform: "uppercase", color: "#8B6914", marginBottom: 10 }}>
+                Background Music
+              </p>
+              <iframe
+                src={driveEmbed(invite.audio)}
+                style={{ width: "100%", height: 80, border: "1px solid #dab96a", borderRadius: 4 }}
+                allow="autoplay"
+                title="Wedding audio"
+              />
             </div>
           )}
 

@@ -1,7 +1,20 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import axiosClient from "../api/axiosClient";
 import type { TemplateId } from "../types/WeddingInvite";
+
+// Drive file ID → direct image src
+const driveImg = (id: string) =>
+  `https://drive.google.com/thumbnail?id=${id}&sz=w400`;
+
+async function uploadFile(file: File): Promise<string> {
+  const fd = new FormData();
+  fd.append("file", file);
+  const res = await axiosClient.post<{ fileId: string }>("/uploads", fd, {
+    headers: { "Content-Type": "multipart/form-data" },
+  });
+  return res.data.fileId;
+}
 
 type InviteCategory = "wedding" | "birthday" | "babyshower";
 
@@ -52,6 +65,50 @@ const CreateInvite = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [createdSlug, setCreatedSlug] = useState("");
+
+  // Media state — Google Drive file IDs
+  const [groomImage, setGroomImage] = useState("");
+  const [brideImage, setBrideImage] = useState("");
+  const [gallery, setGallery] = useState<string[]>([]);
+  const [video, setVideo] = useState("");
+  const [audio, setAudio] = useState("");
+  const [uploading, setUploading] = useState<Record<string, boolean>>({});
+
+  const groomImgRef = useRef<HTMLInputElement>(null);
+  const brideImgRef = useRef<HTMLInputElement>(null);
+  const galleryRef = useRef<HTMLInputElement>(null);
+  const videoRef = useRef<HTMLInputElement>(null);
+  const audioRef = useRef<HTMLInputElement>(null);
+
+  const isClassicWedding = form.template === "classic";
+
+  async function handleSingleUpload(
+    file: File,
+    setter: (id: string) => void,
+    key: string,
+  ) {
+    setUploading((u) => ({ ...u, [key]: true }));
+    try {
+      const id = await uploadFile(file);
+      setter(id);
+    } catch {
+      setError("Upload failed. Check your connection and try again.");
+    } finally {
+      setUploading((u) => ({ ...u, [key]: false }));
+    }
+  }
+
+  async function handleGalleryUpload(files: FileList) {
+    setUploading((u) => ({ ...u, gallery: true }));
+    try {
+      const ids = await Promise.all(Array.from(files).map(uploadFile));
+      setGallery((prev) => [...prev, ...ids]);
+    } catch {
+      setError("One or more gallery uploads failed.");
+    } finally {
+      setUploading((u) => ({ ...u, gallery: false }));
+    }
+  }
 
   const category = getCategoryFromTemplate(form.template);
 
@@ -117,7 +174,11 @@ const CreateInvite = () => {
 
     setLoading(true);
     try {
-      const payload = { ...form, message: finalMessage };
+      const payload = {
+        ...form,
+        message: finalMessage,
+        ...(isClassicWedding && { groomImage, brideImage, gallery, video, audio }),
+      };
       const res = await axiosClient.post("/invites", payload);
       setCreatedSlug(res.data.slug);
     } catch (err: any) {
@@ -153,7 +214,7 @@ const CreateInvite = () => {
 
           <button
             onClick={() => { navigator.clipboard.writeText(link); alert("Link copied!"); }}
-            className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 rounded-xl transition-colors text-sm mb-3"
+            className="w-full  cursor-pointer bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 rounded-xl transition-colors text-sm mb-3"
           >
             Copy Link
           </button>
@@ -163,13 +224,13 @@ const CreateInvite = () => {
               href={link}
               target="_blank"
               rel="noreferrer"
-              className="flex-1 text-center border border-gray-200 hover:bg-gray-50 text-gray-700 font-semibold py-3 rounded-xl transition-colors text-sm"
+              className="flex-1 cursor-pointer text-center border border-gray-200 hover:bg-gray-50 text-gray-700 font-semibold py-3 rounded-xl transition-colors text-sm"
             >
               Preview
             </a>
             <button
               onClick={() => navigate("/invites")}
-              className="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-700 font-semibold py-3 rounded-xl transition-colors text-sm"
+              className="flex-1 cursor-pointer bg-gray-100 hover:bg-gray-200 text-gray-700 font-semibold py-3 rounded-xl transition-colors text-sm"
             >
               My Invitations
             </button>
@@ -397,6 +458,193 @@ const CreateInvite = () => {
             />
           </div>
         </div>
+
+        {/* ── Media uploads (classic wedding only) ─────────────────────────── */}
+        {isClassicWedding && (
+          <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5 space-y-5">
+            <h2 className="text-sm font-bold text-gray-700 uppercase tracking-wider">Photos, Video & Audio</h2>
+
+            {/* Groom & Bride photos */}
+            <div className="grid grid-cols-2 gap-4">
+              {/* Groom photo */}
+              <div>
+                <label className="block text-sm font-semibold text-gray-700 mb-1.5">Groom Photo</label>
+                <input
+                  ref={groomImgRef}
+                  type="file"
+                  accept="image/*"
+                  className="hidden"
+                  onChange={(e) => {
+                    const f = e.target.files?.[0];
+                    if (f) handleSingleUpload(f, setGroomImage, "groom");
+                  }}
+                />
+                <button
+                  type="button"
+                  onClick={() => groomImgRef.current?.click()}
+                  disabled={uploading.groom}
+                  className="w-full flex flex-col items-center justify-center border-2 border-dashed border-gray-200 rounded-xl py-4 gap-1 text-xs text-gray-400 hover:border-amber-400 hover:text-amber-600 transition disabled:opacity-50 cursor-pointer"
+                >
+                  {uploading.groom ? (
+                    <span>Uploading…</span>
+                  ) : groomImage ? (
+                    <>
+                      <img src={driveImg(groomImage)} alt="groom" className="w-16 h-16 object-cover rounded-full border-2 border-amber-300" />
+                      <span className="text-green-600 font-semibold">Uploaded ✓</span>
+                      <span className="text-gray-400">Click to replace</span>
+                    </>
+                  ) : (
+                    <>
+                      <svg className="w-7 h-7" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 4v16m8-8H4" /></svg>
+                      <span>Upload photo</span>
+                    </>
+                  )}
+                </button>
+              </div>
+
+              {/* Bride photo */}
+              <div>
+                <label className="block text-sm font-semibold text-gray-700 mb-1.5">Bride Photo</label>
+                <input
+                  ref={brideImgRef}
+                  type="file"
+                  accept="image/*"
+                  className="hidden"
+                  onChange={(e) => {
+                    const f = e.target.files?.[0];
+                    if (f) handleSingleUpload(f, setBrideImage, "bride");
+                  }}
+                />
+                <button
+                  type="button"
+                  onClick={() => brideImgRef.current?.click()}
+                  disabled={uploading.bride}
+                  className="w-full flex flex-col items-center justify-center border-2 border-dashed border-gray-200 rounded-xl py-4 gap-1 text-xs text-gray-400 hover:border-amber-400 hover:text-amber-600 transition disabled:opacity-50 cursor-pointer"
+                >
+                  {uploading.bride ? (
+                    <span>Uploading…</span>
+                  ) : brideImage ? (
+                    <>
+                      <img src={driveImg(brideImage)} alt="bride" className="w-16 h-16 object-cover rounded-full border-2 border-amber-300" />
+                      <span className="text-green-600 font-semibold">Uploaded ✓</span>
+                      <span className="text-gray-400">Click to replace</span>
+                    </>
+                  ) : (
+                    <>
+                      <svg className="w-7 h-7" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 4v16m8-8H4" /></svg>
+                      <span>Upload photo</span>
+                    </>
+                  )}
+                </button>
+              </div>
+            </div>
+
+            {/* Gallery */}
+            <div>
+              <label className="block text-sm font-semibold text-gray-700 mb-1.5">
+                Gallery Photos
+                <span className="ml-1.5 text-xs font-normal text-gray-400">({gallery.length} uploaded)</span>
+              </label>
+              <input
+                ref={galleryRef}
+                type="file"
+                accept="image/*"
+                multiple
+                className="hidden"
+                onChange={(e) => {
+                  if (e.target.files?.length) handleGalleryUpload(e.target.files);
+                }}
+              />
+              {gallery.length > 0 && (
+                <div className="flex flex-wrap gap-2 mb-2">
+                  {gallery.map((id, i) => (
+                    <div key={id} className="relative group">
+                      <img src={driveImg(id)} alt={`gallery-${i}`} className="w-14 h-14 object-cover rounded-lg border border-gray-200" />
+                      <button
+                        type="button"
+                        onClick={() => setGallery((g) => g.filter((_, idx) => idx !== i))}
+                        className="absolute -top-1.5 -right-1.5 bg-red-500 text-white rounded-full w-4 h-4 text-xs flex items-center justify-center opacity-0 group-hover:opacity-100 transition"
+                      >×</button>
+                    </div>
+                  ))}
+                </div>
+              )}
+              <button
+                type="button"
+                onClick={() => galleryRef.current?.click()}
+                disabled={uploading.gallery}
+                className="w-full flex items-center justify-center gap-2 border-2 border-dashed border-gray-200 rounded-xl py-3 text-xs text-gray-400 hover:border-amber-400 hover:text-amber-600 transition disabled:opacity-50 cursor-pointer"
+              >
+                {uploading.gallery ? "Uploading…" : (
+                  <>
+                    <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 4v16m8-8H4" /></svg>
+                    Add gallery photos
+                  </>
+                )}
+              </button>
+            </div>
+
+            {/* Video */}
+            <div>
+              <label className="block text-sm font-semibold text-gray-700 mb-1.5">Video</label>
+              <input
+                ref={videoRef}
+                type="file"
+                accept="video/*"
+                className="hidden"
+                onChange={(e) => {
+                  const f = e.target.files?.[0];
+                  if (f) handleSingleUpload(f, setVideo, "video");
+                }}
+              />
+              <button
+                type="button"
+                onClick={() => videoRef.current?.click()}
+                disabled={uploading.video}
+                className="w-full flex items-center justify-center gap-2 border-2 border-dashed border-gray-200 rounded-xl py-3 text-xs text-gray-400 hover:border-amber-400 hover:text-amber-600 transition disabled:opacity-50 cursor-pointer"
+              >
+                {uploading.video ? "Uploading…" : video ? (
+                  <span className="text-green-600 font-semibold">Video uploaded ✓  (click to replace)</span>
+                ) : (
+                  <>
+                    <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M15 10l4.553-2.069A1 1 0 0121 8.82v6.36a1 1 0 01-1.447.89L15 14M3 8a2 2 0 012-2h8a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2V8z" /></svg>
+                    Upload video
+                  </>
+                )}
+              </button>
+            </div>
+
+            {/* Audio */}
+            <div>
+              <label className="block text-sm font-semibold text-gray-700 mb-1.5">Audio / Background Music</label>
+              <input
+                ref={audioRef}
+                type="file"
+                accept="audio/*"
+                className="hidden"
+                onChange={(e) => {
+                  const f = e.target.files?.[0];
+                  if (f) handleSingleUpload(f, setAudio, "audio");
+                }}
+              />
+              <button
+                type="button"
+                onClick={() => audioRef.current?.click()}
+                disabled={uploading.audio}
+                className="w-full flex items-center justify-center gap-2 border-2 border-dashed border-gray-200 rounded-xl py-3 text-xs text-gray-400 hover:border-amber-400 hover:text-amber-600 transition disabled:opacity-50 cursor-pointer"
+              >
+                {uploading.audio ? "Uploading…" : audio ? (
+                  <span className="text-green-600 font-semibold">Audio uploaded ✓  (click to replace)</span>
+                ) : (
+                  <>
+                    <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3" /></svg>
+                    Upload audio
+                  </>
+                )}
+              </button>
+            </div>
+          </div>
+        )}
 
         {/* ── Invitation URL ────────────────────────────────────────────────── */}
         <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5 space-y-3">
