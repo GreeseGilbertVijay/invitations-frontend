@@ -2,11 +2,26 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/invitations/vite.svg" />
+    <link rel="icon" type="image/svg+xml" href="./vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Wedding Invite</title>
-    <script type="module" crossorigin src="/invitations/assets/index-BmxY022x.js"></script>
-    <link rel="stylesheet" crossorigin href="/invitations/assets/index--lPbM872.css">
+    <script>
+      // Restore path encoded by 404.html redirect (GitHub Pages SPA trick).
+      (function () {
+        var params = new URLSearchParams(window.location.search);
+        var p = params.get('p');
+        if (p) {
+          var q = params.get('q');
+          params.delete('p');
+          params.delete('q');
+          var rest = params.toString();
+          var search = (q ? '?' + q.replace(/~and~/g, '&') : '') + (rest ? (q ? '&' : '?') + rest : '');
+          window.history.replaceState(null, '', '/invitations-frontend' + p + search + window.location.hash);
+        }
+      })();
+    </script>
+    <script type="module" crossorigin src="/invitations-frontend/assets/index-Bw3o7n8s.js"></script>
+    <link rel="stylesheet" crossorigin href="/invitations-frontend/assets/index--lPbM872.css">
   </head>
   <body>
     <div id="root"></div>
