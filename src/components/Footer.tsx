@@ -35,7 +35,7 @@ const Footer = () => {
                 💍
               </div>
               <span className="font-bold text-white tracking-wide text-base">
-                Wedding Invite
+                Invitations
               </span>
             </Link>
             <p className="text-sm leading-relaxed text-gray-400 max-w-xs">
@@ -44,7 +44,7 @@ const Footer = () => {
               needed.
             </p>
             <span className="text-xs text-gray-600">
-              © {new Date().getFullYear()} Wedding Invite. All rights reserved.
+              © {new Date().getFullYear()} E-Invite. All rights reserved.
             </span>
           </div>
 
@@ -95,20 +95,20 @@ const Footer = () => {
             <ul className="flex flex-col gap-3 mb-6">
               <li>
                 <a
-                  href="mailto:info@weddinginvite.in"
+                  href="mailto:greesegilbertvijay@gmail.com"
                   className="flex items-center gap-2 text-sm text-gray-400 hover:text-pink-400 transition-colors"
                 >
                   <MdEmail className="w-4 h-4 text-pink-500 flex-shrink-0" />
-                  info@weddinginvite.in
+                  greesegilbertvijay@gmail.com
                 </a>
               </li>
               <li>
                 <a
-                  href="tel:+919876543210"
+                  href="tel:+"
                   className="flex items-center gap-2 text-sm text-gray-400 hover:text-pink-400 transition-colors"
                 >
                   <MdPhone className="w-4 h-4 text-pink-500 flex-shrink-0" />
-                  +91 98765 43210
+                  +91 95665 XXXXX
                 </a>
               </li>
             </ul>
@@ -136,7 +136,7 @@ const Footer = () => {
                 <FaFacebookF className="w-3.5 h-3.5 text-gray-300" />
               </a>
               <a
-                href="https://wa.me/919876543210"
+                href="https://wa.me/9195665XXXXX"
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="WhatsApp"
@@ -159,7 +159,7 @@ const Footer = () => {
 
         {/* Bottom bar */}
         <p className="text-center text-xs text-gray-600 pt-5">
-          Made with ❤️ for every special occasion · Powered by Wedding Invite
+          Made with ❤️ for Every Special Occasion · Powered by greesegilbertvijay · No personal data collected. Use freely, share with friends, and create beautiful invitations without any worries. Contact us if you have any questions or need support — we're here to help make your events unforgettable! Your privacy and satisfaction are our top priorities. Happy inviting! 🎉
         </p>
       </div>
     </footer>

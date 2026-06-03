@@ -109,8 +109,7 @@ const TopNav = () => {
             💍
           </div>
 
-          <span className="font-bold tracking-wide text-base text-white">
-            Wedding Invite
+          <span className="font-bold tracking-wide text-base text-white">Invitations
           </span>
         </Link>
 
