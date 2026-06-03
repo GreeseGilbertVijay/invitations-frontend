@@ -9,7 +9,7 @@ const formatDate = (d: string) => {
 };
 
 const formatDateShort = (d: string) => {
-  if (!d) return "";
+  if (!d) return { day: "", month: "", year: "", weekday: "" };
   const date = new Date(d);
   return {
     day: date.toLocaleDateString("en-IN", { day: "2-digit" }),

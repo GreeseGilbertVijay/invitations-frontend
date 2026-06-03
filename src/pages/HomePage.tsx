@@ -1,5 +1,6 @@
 import { Link, useNavigate } from "react-router-dom";
 import TopNav from "../components/TopNav";
+import Footer from "../components/Footer";
 import { getTokenPayload } from "../utils/auth";
 
 const categories = [
@@ -182,16 +183,7 @@ const HomePage = () => {
             </div>
           </section>
 
-          {/* Footer */}
-          <footer className="px-4 lg:px-12 py-6 bg-gray-900 text-gray-400 text-center text-xs">
-            © {new Date().getFullYear()} InviteBox. All rights reserved.
-            <span className="mx-2">·</span>
-            {isLoggedIn ? (
-              <></>
-            ) : (
-            <><Link to="/login" className="hover:text-white transition-colors">Sign In</Link><span className="mx-2">·</span><Link to="/signup" className="hover:text-white transition-colors">Sign Up</Link></>
-            )}
-          </footer>
+          <Footer />
       </main>
     </div>
   );

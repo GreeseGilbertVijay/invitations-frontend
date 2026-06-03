@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { NavLink, useNavigate } from "react-router-dom";
+import { Link, NavLink, useNavigate } from "react-router-dom";
 import { MdHouse, MdDashboard, MdEmail, MdAdd, MdPerson, MdViewList, MdLogout, MdClose, MdMenu, MdApps } from "react-icons/md";
 import { isSuperAdmin, getTokenPayload } from "../utils/auth";
 
@@ -104,15 +104,15 @@ const TopNav = () => {
     <header className="bg-gray-900 text-white sticky top-0 z-30 shadow-md">
       <div className="px-4 flex items-center justify-between h-14">
         {/* Brand */}
-        <div className="flex items-center gap-2 flex-shrink-0">
+        <Link to="/" className="flex items-center gap-2 flex-shrink-0">
           <div className="w-7 h-7 bg-pink-500 rounded-lg flex items-center justify-center text-sm">
             💍
           </div>
 
-          <span className="font-bold tracking-wide text-base">
+          <span className="font-bold tracking-wide text-base text-white">
             Wedding Invite
           </span>
-        </div>
+        </Link>
 
         {/* Desktop Menu */}
         <nav className="hidden md:flex items-center gap-1 ml-6">

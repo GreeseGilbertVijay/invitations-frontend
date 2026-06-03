@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { MdFilterList } from "react-icons/md";
 import { getTokenPayload } from "../utils/auth";
+import Footer from "../components/Footer";
 
 type Category = "all" | "wedding" | "birthday" | "babyshower";
 
@@ -148,7 +149,8 @@ const TemplatesPage = () => {
   };
 
   return (
-    <div className="p-4 lg:p-4 max-w-7xl mx-auto">
+    <div className="flex flex-col min-h-screen">
+    <div className="p-4 lg:p-4 max-w-7xl mx-auto flex-1 w-full">
       {/* Header */}
       <div className="mb-8">
         <h1 className="text-2xl lg:text-3xl font-bold text-gray-800">Invitation Templates</h1>
@@ -229,6 +231,8 @@ const TemplatesPage = () => {
           </div>
         ))}
       </div>
+    </div>
+    <Footer />
     </div>
   );
 };
