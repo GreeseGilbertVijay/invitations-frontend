@@ -1,4 +1,4 @@
-export type TemplateId = "classic" | "modern" | "floral" | "birthday1" | "birthday2" | "babyshower1" | "babyshower2";
+export type TemplateId = string;
 export type InviteCategory = "wedding" | "birthday" | "babyshower";
 
 export interface WeddingInvite {

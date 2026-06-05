@@ -2,9 +2,7 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import axiosClient from "../api/axiosClient";
 import type { WeddingInvite } from "../types/WeddingInvite";
-import ClassicTemplate from "../components/templates/ClassicTemplate";
-import ModernTemplate from "../components/templates/ModernTemplate";
-import FloralTemplate from "../components/templates/FloralTemplate";
+import { templateRegistry } from "../templates/registry";
 
 type PageState = "loading" | "ok" | "expired" | "draft" | "notfound";
 
@@ -197,9 +195,8 @@ const PublicInvite = () => {
     );
   }
 
-  if (invite.template === "modern") return <ModernTemplate invite={invite} />;
-  if (invite.template === "floral") return <FloralTemplate invite={invite} />;
-  return <ClassicTemplate invite={invite} />;
+  const entry = templateRegistry.find((t) => t.id === invite.template) ?? templateRegistry[0];
+  return <entry.Component invite={invite} />;
 };
 
 export default PublicInvite;

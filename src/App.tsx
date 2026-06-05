@@ -18,7 +18,7 @@ import TemplatePreviewPage from "./pages/TemplatePreviewPage";
 
 function App() {
   return (
-    <BrowserRouter>
+    <BrowserRouter basename="/invitations-frontend">
       <Routes>
         {/* Public landing page */}
         <Route path="/" element={<HomePage />} />
