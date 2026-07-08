@@ -1,12 +1,12 @@
 import axios from "axios";
 
-const axiosClient = axios.create({
-  baseURL: "http://localhost:5050/api",
-});
-
 // const axiosClient = axios.create({
-//   baseURL: import.meta.env.VITE_API_URL ?? "https://e-invitations-backend.vercel.app/api",
+//   baseURL: "http://localhost:5050/api",
 // });
+
+const axiosClient = axios.create({
+  baseURL: import.meta.env.VITE_API_URL ?? "https://e-invitations-backend.vercel.app/api",
+});
 
 // ✅ Add token if available
 axiosClient.interceptors.request.use((config) => {

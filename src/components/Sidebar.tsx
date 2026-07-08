@@ -57,7 +57,7 @@ const Sidebar = ({ open, onClose }: SidebarProps) => {
             <div className="w-8 h-8 bg-pink-500 rounded-lg flex items-center justify-center text-base">
               💍
             </div>
-            <span className="text-lg font-bold tracking-wide">Wedding Invite</span>
+            <span className="text-lg font-bold tracking-wide">E-Invitations</span>
           </div>
           <button onClick={onClose} className="lg:hidden text-gray-400 hover:text-white">
             <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">

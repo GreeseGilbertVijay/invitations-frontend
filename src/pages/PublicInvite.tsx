@@ -145,7 +145,7 @@ const PublicInvite = () => {
             paddingTop: 20,
           }}>
             <p style={{ fontSize: 12, color: "#bbb", letterSpacing: 2, textTransform: "uppercase" }}>
-              Powered by Wedding Invite 💍
+              Powered by E-Invitations 💍
             </p>
           </div>
         </div>
